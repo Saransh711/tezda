@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "755093503541",
+    "project_id": "tezda-e0101",
+    "storage_bucket": "tezda-e0101.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755093503541:android:48ab22f1ad6a7b5c2d3b7c",
+        "android_client_info": {
+          "package_name": "com.example.tezda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbrTdQgx6mNxl8ywbEr-CKnVey_VLA624"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755093503541:android:ad8178e79d3a245a2d3b7c",
+        "android_client_info": {
+          "package_name": "com.example.tezda.Android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbrTdQgx6mNxl8ywbEr-CKnVey_VLA624"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
