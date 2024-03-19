@@ -34,3 +34,10 @@ class SaveButtonTapEvent extends LoginEvent {
   @override
   List<Object> get props => [];
 }
+
+class ReloadEvent extends LoginEvent {
+  const ReloadEvent();
+
+  @override
+  List<Object> get props => [];
+}

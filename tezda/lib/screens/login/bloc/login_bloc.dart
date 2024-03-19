@@ -20,6 +20,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginBlocState> {
     on<SaveButtonTapEvent>((event, emit) async {
       await updateUser(event, emit);
     });
+    on<ReloadEvent>((event, emit) async {
+      await getUser(event, emit);
+    });
   }
   Future<void> signInUser(
       LoginButtonTapEvent event, Emitter<LoginBlocState> emit) async {
@@ -41,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginBlocState> {
           rethrow;
         }
       }
-      // Store user information in Firestore
+
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
         "id": userCredential.user!.uid,
         'name': userCredential.user!.displayName ?? '',
@@ -78,6 +81,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginBlocState> {
   Future<void> updateUser(
       SaveButtonTapEvent event, Emitter<LoginBlocState> emit) async {
     try {
+      emit(const Loading());
       await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
         'name': event.name,
         'email': event.email,
@@ -91,6 +95,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginBlocState> {
 
       Map<String, dynamic> userInfo = userData.data() as Map<String, dynamic>;
       emit(const UpdateSuccess());
+      emit(LoginSuccess(
+        id: userInfo['id'],
+        name: userInfo['name'],
+        email: userInfo['email'],
+        image: userInfo['img'],
+      ));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> getUser(ReloadEvent event, Emitter<LoginBlocState> emit) async {
+    try {
+      DocumentSnapshot userData = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
+
+      Map<String, dynamic> userInfo = userData.data() as Map<String, dynamic>;
       emit(LoginSuccess(
         id: userInfo['id'],
         name: userInfo['name'],

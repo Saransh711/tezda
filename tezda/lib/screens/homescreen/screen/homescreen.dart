@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tezda/screens/login/bloc/login_event.dart';
 import 'package:tezda/screens/product/bloc/products_bloc.dart';
 import 'package:tezda/screens/product/bloc/products_event.dart';
 import 'package:tezda/screens/product/screen/products.dart';
 
+import '../../login/bloc/login_bloc.dart';
 import '../../profile/profile.dart';
 
 class Homescreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class _HomescreenState extends State<Homescreen> {
   ];
   @override
   void initState() {
+    context.read<LoginBloc>().add(const ReloadEvent());
     if (_selectedIndex == 0) {
       BlocProvider.of<ProductsBloc>(context).add(
         FetchProducts(),

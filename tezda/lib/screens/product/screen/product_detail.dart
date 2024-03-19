@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tezda/screens/product/bloc/product_detail_bloc.dart';
 import 'package:tezda/screens/product/bloc/product_detail_state.dart';
+
+import '../bloc/favorite_bloc.dart';
 
 class ProductDetails extends StatefulWidget {
   const ProductDetails({super.key});
@@ -13,6 +16,18 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool isFavorite = false;
+
+  Future<void> _updateFavoriteStatus(String productId) async {
+    final bool favorite = await FavoriteBloc()
+        .isFavorite(FirebaseAuth.instance.currentUser!.uid, productId);
+    if (mounted) {
+      setState(() {
+        isFavorite = favorite;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +43,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ProductDetailLoadSuccess) {
               final product = state.products;
+              _updateFavoriteStatus(product.id.toString());
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,10 +61,34 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          product.image,
-                          width: double.infinity,
-                          fit: BoxFit.contain,
+                        child: Stack(
+                          children: [
+                            Image.network(
+                              product.image,
+                              width: double.infinity,
+                              fit: BoxFit.contain,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isFavorite = !isFavorite;
+                                  FavoriteBloc().toggleFavorite(
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                      product.id.toString());
+                                });
+                              },
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isFavorite ? Colors.red : null,
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

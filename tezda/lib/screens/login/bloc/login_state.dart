@@ -77,3 +77,10 @@ class LogoutSuccess extends LoginBlocState {
   @override
   List<Object> get props => [];
 }
+
+class Loading extends LoginBlocState {
+  const Loading();
+
+  @override
+  List<Object> get props => [];
+}
